@@ -120,8 +120,8 @@
   const qsa = (s, r = document) => [...r.querySelectorAll(s)];
   const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch {} } };
 
-  let lang = store.get("lc-lang") || (navigator.language || "es").slice(0,2);
-  if (!I18N[lang]) lang = "en";
+  let lang = store.get("lc-lang") || "es";
+  if (!I18N[lang]) lang = "es";
 
   const locale = () => (lang === "es" ? "es-AR" : "en-US");
   /* demo amounts are stored in USD; the Spanish version shows them as realistic ARS figures */
