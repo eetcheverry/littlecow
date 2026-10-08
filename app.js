@@ -124,7 +124,9 @@
   if (!I18N[lang]) lang = "en";
 
   const locale = () => (lang === "es" ? "es-AR" : "en-US");
-  const money = n => new Intl.NumberFormat(locale(), { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(n);
+  const money = n => new Intl.NumberFormat(locale(), lang === "es"
+    ? { style:"currency", currency:"ARS", currencyDisplay:"code", maximumFractionDigits:0 }
+    : { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(n);
   const fill = s => s.replace(/\{m(\d+)\}/g, (_, n) => money(+n));
   const t = k => I18N[lang][k] ?? I18N.es[k] ?? k;
 
