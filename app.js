@@ -124,9 +124,16 @@
   if (!I18N[lang]) lang = "en";
 
   const locale = () => (lang === "es" ? "es-AR" : "en-US");
-  const money = n => new Intl.NumberFormat(locale(), lang === "es"
-    ? { style:"currency", currency:"ARS", currencyDisplay:"code", maximumFractionDigits:0 }
-    : { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(n);
+  /* demo amounts are stored in USD; the Spanish version shows them as realistic ARS figures */
+  const CURRENCY = {
+    es: { currency:"ARS", currencyDisplay:"code", scale:4000, round:5000 },
+    en: { currency:"USD", scale:1, round:1 }
+  };
+  const money = n => {
+    const { scale, round, ...fmt } = CURRENCY[lang];
+    const v = Math.round(n * scale / round) * round;
+    return new Intl.NumberFormat(locale(), { style:"currency", maximumFractionDigits:0, ...fmt }).format(v);
+  };
   const fill = s => s.replace(/\{m(\d+)\}/g, (_, n) => money(+n));
   const t = k => I18N[lang][k] ?? I18N.es[k] ?? k;
 
